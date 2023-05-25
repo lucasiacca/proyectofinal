@@ -1,0 +1,15 @@
+{% extends "blog_app/base.html" %}
+
+{% block contenido %}
+
+<h1>Información del usuario</h1>
+<p>Nombre de usuario: {{ user.username }}</p>                             
+<p>Correo electrónico: {{ user.email }}</p>
+<p>Avatar: <img src="{{ user.avatar.imagen.url }}" alt="Avatar de {{ user.username }} " width="400" ></p>
+
+<form method="post">
+ {% csrf_token %}
+ {{ form.as_p }}
+ <input type="submit" value="Cambiar datos" />
+</form>
+{% endblock contenido %}

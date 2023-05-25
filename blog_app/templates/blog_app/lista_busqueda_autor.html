@@ -1,0 +1,68 @@
+{% extends "blog_app/base.html" %}
+
+{% block contenido %}
+
+{% load static %}
+
+<section>
+  <div>
+    <h1>Artículos del "{{ autor}}"</h1>
+    <br>
+
+    {% if object_list %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Autor</th>
+          <th>Sección</th>
+          <th>Título</th>
+          <th>Subtítulo</th>
+          <th>Cuerpo</th>
+          <th>Imagen</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for articulo in object_list %}
+        <tr>
+          <td>{{ articulo.id }}</td>
+          <td>{{ articulo.fecha }}</td>
+          <td>{{ articulo.autor }}</td>
+          <td>{{ articulo.seccion }}</td>
+          <td>{{ articulo.titulo }}</td>
+          <td>{{ articulo.subtitulo }}</td>
+          <td>{{ articulo.cuerpo }}</td>
+          <td>
+            {% if articulo.imagen %}
+              <img src="{{ articulo.imagen.url }}" alt="{{ articulo.titulo }}">
+            {% else %}
+              No disponible
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'ver_articulo' articulo.id %}">Leer más</a>
+          </td>
+          <td>
+            {% if articulo.autor == request.user %}
+            <a href="{% url 'editar_articulo' articulo.id %}">Editar</a>
+            {% endif %}
+          </td>
+          <td>
+            {% if articulo.autor == request.user %}
+            <a href="{% url 'eliminar_articulo' articulo.id %}">Eliminar</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+       No hay articulos para esta sección
+    {%endif %}
+  </div>
+</section>
+
+{% endblock contenido %}

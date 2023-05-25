@@ -2,15 +2,6 @@
 
 {% block contenido %}
 
-<!-- Page header with logo and tagline-->
-<header class="py-1 bg-light border-bottom mb-4">
-    <div class="container">
-        <div class="text-center my-5">
-            <h1 class="fw-bolder">Welcome to Blog Home!</h1>
-            <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
-        </div>
-    </div>
-</header>
 
 <section style="padding: 4rem 3rem;">
 
@@ -22,7 +13,9 @@
                 <!-- Featured blog post-->
                 <div class="card mb-4">
                     <a href="{% url 'ver_articulo' pk=ultimo_articulo.id %}">
-                        <img class="card-img-top" src="ultimo_articulo.imagen.url" alt="..." />
+                        {% if ultimo_articulo.imagen_articulo %}
+                        <img src="{{ ultimo_articulo.imagen_articulo.url }}" alt="Descripción de la imagen">
+                        {% endif %}
                     </a>
                     <div class="card-body">
                         <div class="small text-muted">{{ ultimo_articulo.fecha }}</div>
@@ -35,7 +28,9 @@
 
                 <div class="card mb-4">
                     <a href="{% url 'ver_articulo' pk=anteultimo_articulo.id %}">
-                        <img class="card-img-top" src="anteultimo_articulo.avatar.imagen.url" alt="..." />
+                        {% if anteultimo_articulo.image_articulo.id %}
+                        <img src="{{ anteultimo_articulo.imagen_articulo.url }}" alt="Descripción de la imagen">
+                        {% endif %}
                     </a>
                     <div class="card-body">
                         <div class="small text-muted">{{ anteultimo_articulo.fecha }}</div>
@@ -57,11 +52,16 @@
                     <ul class="pagination justify-content-center my-4">
                         <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
                         <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                        {% if mostrar_pagina2 %}
                         <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                        {% if mostrar_pagina3 %}
                         <li class="page-item"><a class="page-link" href="#!">3</a></li>
                         <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
                         <li class="page-item"><a class="page-link" href="#!">15</a></li>
                         <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                        {% endif %}
+                        {% endif %}
+                        
                     </ul>
                 </nav>
             </div>
@@ -73,22 +73,30 @@
                     <div class="card-header">Busqueda por articulo</div>
                     <div class="card-body">
                         <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+    
+                            <form action="{% url 'buscar_articulostitle' %}" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="busqueda">
+                                <input type="submit" value="Buscar por titulo">
                         </div>
                     </div>
                 </div>
 
-                <!-- Search widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Busqueda por autor</div>
-                    <div class="card-body">
-                        <div class="input-group">
-                            <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                            <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                
+                    <div class="card mb-4">
+                        <div class="card-header">Busqueda por articulo</div>
+                        <div class="card-body">
+                            <div class="input-group">
+        
+                                <form action="{% url 'buscar_articulos_autor' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="text" name="busqueda">
+                                    <input type="submit" value="Buscar por autor">
+                            </div>
                         </div>
                     </div>
-                </div>    
+                
+                
 
                 <!-- Categories widget-->
                 <div class="card mb-4">
@@ -97,10 +105,10 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <ul class="list-unstyled mb-0">
-                                    <li><a href="#!">Policiales</a></li>
-                                    <li><a href="#!">Política</a></li>
-                                    <li><a href="#!">Deportes</a></li>
-                                    <li><a href="#!">Interes General</a></li>
+                                    <li><a href="{% url 'articulos_seccion' 'Policiales' %}">Policiales</a></li>
+                                    <li><a href="{% url 'articulos_seccion' 'Politica' %}"">Política</a></li>
+                                    <li><a href="{% url 'articulos_seccion' 'Deportes' %}">Deportes</a></li>
+                                    <li><a href="{% url 'articulos_seccion' 'Interes General' %}"">Interes General</a></li>
                                 </ul>
                             </div>
                             <div class="col-sm-6">

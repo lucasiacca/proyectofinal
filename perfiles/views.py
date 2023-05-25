@@ -64,18 +64,22 @@ class MiPerfilUpdateView(LoginRequiredMixin, UpdateView):
        return self.request.user
 
 def agregar_avatar(request):
-  if request.method == "POST":
-      formulario = AvatarFormulario(request.POST, request.FILES) 
+    if request.method == 'POST':
+        form = AvatarFormulario(request.POST, request.FILES)
+        if form.is_valid():
+            # Eliminar el avatar existente si existe
+            if request.user.avatar:
+                request.user.avatar.delete()
 
-      if formulario.is_valid():
-          avatar = formulario.save()
-          avatar.user = request.user
-          avatar.save()
-          url_exitosa = reverse('inicio')
-          return redirect(url_exitosa)
-  else:  # GET
+            # Guardar el nuevo avatar
+            avatar = form.save(commit=False)
+            avatar.user = request.user
+            avatar.save()
+            url_exitosa = reverse('editar_perfil')
+            return redirect(url_exitosa)
+    else:  # GET
       formulario = AvatarFormulario()
-  return render(
+    return render(
       request=request,
       template_name="perfiles/formulario_avatar.html",
       context={'form': formulario},
