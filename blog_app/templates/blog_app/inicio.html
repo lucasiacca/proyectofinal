@@ -66,36 +66,7 @@
                 </nav>
             </div>
             
-            <!-- Side widgets-->
-            <div class="col-lg-4">
-                <!-- Search widget-->
-                <div class="card mb-4">
-                    <div class="card-header">Busqueda por articulo</div>
-                    <div class="card-body">
-                        <div class="input-group">
-    
-                            <form action="{% url 'buscar_articulostitle' %}" method="post">
-                                {% csrf_token %}
-                                <input type="text" name="busqueda">
-                                <input type="submit" value="Buscar por titulo">
-                        </div>
-                    </div>
-                </div>
-
-                
-                    <div class="card mb-4">
-                        <div class="card-header">Busqueda por articulo</div>
-                        <div class="card-body">
-                            <div class="input-group">
-        
-                                <form action="{% url 'buscar_articulos_autor' %}" method="post">
-                                    {% csrf_token %}
-                                    <input type="text" name="busqueda">
-                                    <input type="submit" value="Buscar por autor">
-                            </div>
-                        </div>
-                    </div>
-                
+           
                 
 
                 <!-- Categories widget-->

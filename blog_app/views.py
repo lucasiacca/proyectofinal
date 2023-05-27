@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django import forms
 from .models import Articulo
 from .forms import ImagenFormulario
 from django.contrib.auth.decorators import login_required
@@ -9,9 +10,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ArticuloCreateView(LoginRequiredMixin, CreateView):
     model = Articulo 
-    fields = ("titulo", "seccion", "subtitulo", "cuerpo", "autor", "imagen_articulo")
+    fields = ("titulo", "seccion", "subtitulo", "cuerpo", "imagen_articulo")
     success_url = reverse_lazy("lista_articulos")
     
+  
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['autor'] = self.request.user.username
+        return initial
 
 class ArticuloUpdateView(LoginRequiredMixin, UpdateView):
     model = Articulo 
@@ -47,6 +57,28 @@ class ArticuloSectionListView(ListView):
             context['seccion'] = ""
         return context
     
+class ArticuloAutorForm(forms.Form):
+    autor = forms.ModelChoiceField(queryset=Articulo.objects.values_list('autor', flat=True).distinct())
+
+class ArticuloAutorListView(ListView):
+    model = Articulo
+    template_name = "blog_app/lista_busqueda_autor.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        autor = self.request.GET.get('autor')  # Obtener el valor seleccionado del formulario
+        if autor:
+            queryset = queryset.filter(autor__username=autor)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+     context = super().get_context_data(**kwargs)
+     form = ArticuloAutorForm()
+     context['form'] = form
+     return context
+
+
+    
 
 
 
@@ -55,6 +87,7 @@ class ArticuloDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("lista_articulos")   
     
 def buscar_articulo_title(request): 
+    print("entranda a la prueba")
     if request.method == "POST":
        data = request.POST
        busqueda = data.get("busqueda")
@@ -62,21 +95,21 @@ def buscar_articulo_title(request):
        object_list = list(articulos)
        contexto = {"object_list": object_list,}
        
-       return render(request, "blog_app/lista_articulos.html", context = contexto)
-    else:
-        return render(request, "blog_app/lista_articulos.html")
-
-def buscar_articulo_autor(request): 
-    if request.method == "POST":
-       data = request.POST
-       busqueda = data.get("busqueda")
-       articulos = Articulo.objects.filter(autor__contains=busqueda)
-       object_list = list(articulos)
-       contexto = {"object_list": object_list,}
+       print(f"Resultados de la búsqueda: {object_list}")
        
-       return render(request, "blog_app/lista_articulos.html", context = contexto)
+       return render(request, "blog_app/lista_busqueda_articulos.html", context = contexto)
     else:
-        return render(request, "blog_app/lista_articulos.html")   
+        return render(request, "blog_app/lista_busqueda_articulos.html")
+
+def buscar_articulo_autor(request):
+    if request.method == 'POST':
+        autor = request.POST.get('busqueda')  # Obtener el nombre del autor desde el formulario
+        articulos = Articulo.objects.filter(autor__username__icontains=autor)  # Filtrar artículos por el nombre de usuario del autor
+        context = {'articulos': articulos}
+        return render(request, 'blog_app/lista_articulos.html', context)
+    return render(request, 'blog_app/lista_articulos.html')
+
+  
     
 def index(request):
     bienvenida = "Bienvenido al Blog"
@@ -96,7 +129,7 @@ def index(request):
         mostrar_pagina2 = True
     
     if len(articulos) >= 5:
-        mostrar_pagina3 = True
+        mostrar_pagina2 = True
         
 
     context = {
@@ -105,7 +138,6 @@ def index(request):
         "anteultimo_articulo": anteultimo_articulo,
         "antepenultimoarticulo": antepenultimo_articulo,
         "mostrar_pagina2": mostrar_pagina2, 
-        "mostrar_pagina3": mostrar_pagina3,
     }
 
     if len(articulos) == 0:

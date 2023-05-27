@@ -4,8 +4,10 @@
 
 <h1>Información del usuario</h1>
 <p>Nombre de usuario: {{ user.username }}</p>                             
+
+<p>Avatar: <img src="{{ user.avatar.imagen.url }}" alt="Avatar de {{ user.username }} " width="200" ></p>
 <p>Correo electrónico: {{ user.email }}</p>
-<p>Avatar: <img src="{{ user.avatar.imagen.url }}" alt="Avatar de {{ user.username }} " width="400" ></p>
+<p> Cambiar Direccion: </p>
 
 <form method="post">
  {% csrf_token %}
