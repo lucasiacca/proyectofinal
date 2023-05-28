@@ -7,11 +7,12 @@
 
 <p>Avatar: <img src="{{ user.avatar.imagen.url }}" alt="Avatar de {{ user.username }} " width="200" ></p>
 <p>Correo electrónico: {{ user.email }}</p>
-<p> Cambiar Direccion: </p>
-
 <form method="post">
- {% csrf_token %}
- {{ form.as_p }}
- <input type="submit" value="Cambiar datos" />
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Actualizar email" />
 </form>
+<a href="{% url 'inicio' %}">Volver Inicio </a>
+
 {% endblock contenido %}
+

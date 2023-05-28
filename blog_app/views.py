@@ -6,6 +6,7 @@ from .models import Articulo
 from .forms import ImagenFormulario
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
 
 
 class ArticuloCreateView(LoginRequiredMixin, CreateView):
@@ -114,36 +115,38 @@ def buscar_articulo_autor(request):
 def index(request):
     bienvenida = "Bienvenido al Blog"
     articulos = Articulo.objects.order_by('fecha')
-    ultimo_articulo = articulos.latest('fecha')
-    anteultimo_articulo = None
-    antepenultimo_articulo = None
-    mostrar_pagina2 = False
-    mostrar_pagina3 = False
     
-
-    if len(articulos) >= 2:
-        anteultimo_articulo = articulos[1]
-
-    if len(articulos) >= 3:
-        antepenultimo_articulo = articulos[2]
-        mostrar_pagina2 = True
-    
-    if len(articulos) >= 5:
-        mostrar_pagina2 = True
-        
-
-    context = {
-        "bienvenida": bienvenida,
-        "ultimo_articulo": ultimo_articulo,
-        "anteultimo_articulo": anteultimo_articulo,
-        "antepenultimoarticulo": antepenultimo_articulo,
-        "mostrar_pagina2": mostrar_pagina2, 
-    }
-
     if len(articulos) == 0:
-        context["mensaje"] = "No existen artículos aún"
+        context = {
+            "bienvenida": bienvenida,
+            "mensaje": "No existen artículos aún"
+        }
+    else:
+        ultimo_articulo = articulos.latest('fecha')
+        anteultimo_articulo = None
+        antepenultimo_articulo = None
+        mostrar_pagina2 = False
+
+        if len(articulos) >= 2:
+            anteultimo_articulo = articulos[1]
+
+        if len(articulos) >= 3:
+            antepenultimo_articulo = articulos[2]
+            mostrar_pagina2 = True
+
+        if len(articulos) >= 5:
+            mostrar_pagina2 = True
+
+        context = {
+            "bienvenida": bienvenida,
+            "ultimo_articulo": ultimo_articulo,
+            "anteultimo_articulo": anteultimo_articulo,
+            "antepenultimoarticulo": antepenultimo_articulo,
+            "mostrar_pagina2": mostrar_pagina2,
+        }
 
     return render(request, "blog_app/inicio.html", context)
+
 
 
 
@@ -173,4 +176,5 @@ def agregar_imagen(request):
       )
 
 
-# Create your views here.
+
+

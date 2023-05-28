@@ -9,4 +9,4 @@ class ImagenFormulario(forms.ModelForm):
    class Meta:
        model = Imagen
        fields = ['imagen_articulo']      
-       
+    

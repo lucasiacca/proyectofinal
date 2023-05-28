@@ -25,7 +25,6 @@
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item me-2"><a class="btn btn-primary btn-md" href="{% url 'lista_articulos' %}">Articulos</a></li>
                         <li class="nav-item me-2"><a class="btn btn-primary btn-md" href="{% url 'sobre_autor' %}">Sobre mi</a></li>
-                        <li class="nav-item me-2"><a class="btn btn-primary btn-md" href="#">Contacto</a></li>
                         {% if user.is_authenticated %}
                         <div class="dropdown">
                             <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="True">

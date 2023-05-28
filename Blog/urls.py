@@ -27,6 +27,7 @@ urlpatterns = [
     path("pages/", include("blog_app.urls")),
     path("accounts/", include("perfiles.urls")),
     path("about/", sobre_autor, name = "sobre_autor"),
+  
 ]
 
 

@@ -68,22 +68,23 @@ def agregar_avatar(request):
         form = AvatarFormulario(request.POST, request.FILES)
         if form.is_valid():
             # Eliminar el avatar existente si existe
-            if request.user.avatar:
+            if hasattr(request.user, 'avatar') and request.user.avatar:
                 request.user.avatar.delete()
-
+            else:
             # Guardar el nuevo avatar
-            avatar = form.save(commit=False)
-            avatar.user = request.user
-            avatar.save()
-            url_exitosa = reverse('editar_perfil')
-            return redirect(url_exitosa)
+             avatar = form.save(commit=False)
+             avatar.user = request.user
+             avatar.save()
+             url_exitosa = reverse('editar_perfil')
+             return redirect(url_exitosa)
     else:  # GET
-      formulario = AvatarFormulario()
+        form = AvatarFormulario()
+    
     return render(
-      request=request,
-      template_name="perfiles/formulario_avatar.html",
-      context={'form': formulario},
-  )
+        request=request,
+        template_name="perfiles/formulario_avatar.html",
+        context={'form': form}
+    )
 
 
 
