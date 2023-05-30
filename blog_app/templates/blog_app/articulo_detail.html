@@ -18,6 +18,8 @@
 <strong>Imagen:</strong> <img src="{{ object.imagen_articulo.url }}" alt="Descripción de la imagen">
 {% endif %}
 <br>
-<a href="{% url 'lista_articulos' %}">Volver a la lista</a>
+<a class="btn btn-sucess" href="{% url 'lista_articulos' %}">Volver a Articulos</a>
+<br>
+<a class="btn btn-sucess" href="{% url 'inicio' %}">Volver Inicio</a>
 
 {% endblock contenido %}

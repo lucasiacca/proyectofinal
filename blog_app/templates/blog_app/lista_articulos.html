@@ -2,61 +2,61 @@
 
 {% block contenido %}
 
-{%load static%}
+{% load static %}
 <section>
- <div>
-  
-   <h1>Articulos</h1>
-   <a href="{% url 'crear_articulo' %}">Crear articulo</a>
-   <br>
-  
+  <div>
+    <h1>Articulos</h1>
+    <a class="btn btn-primary" href="{% url 'crear_articulo' %}">Crear articulo</a>
+    <br>
 
-   <table class="table">
-     <tbody>
-       <tr>
-         <th>ID</th>
-         <th>Fecha</th>
-         <th>Autor</th>
-         <th>Sección</th>
-         <td>Título</td>
-         <td>Subtitulo</td>
-         
-         
-         
-       </tr>
-       {% for articulo in object_list %}
-       <tr>
-         <td>{{ articulo.id }}</td>
-         <td>{{ articulo.fecha }}</td>
-         <td>{{ articulo.autor }}</td>
-         <td>{{ articulo.seccion }}</td>
-         <td>{{ articulo.titulo }}</td>
-         <td>{{ articulo.subtitulo }}</td>
-         
-        </td>
-         <td>
-           <a href="{% url 'ver_articulo' articulo.id %}">Leer mas</a>
-         </td>
-         <td>
-          {% if articulo.autor == request.user %}
-           <a href="{% url 'editar_articulo' articulo.id %}">Editar</a>
-         </td>
-         <td>
-           <a href="{% url 'eliminar_articulo' articulo.id %}">Eliminar</a>
-          {% endif %}
-             <i class="bi bi-trash"></i>
-           </a>
-         </td>
-       </tr>
-       {% endfor %}
-     </tbody>
-   </table>
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Autor</th>
+          <th>Sección</th>
+          <td>Título</td>
+          <td>Subtitulo</td>
+        </tr>
+        
+        {% if object_list %}
+          {% for articulo in object_list %}
+          <tr>
+            <td>{{ articulo.id }}</td>
+            <td>{{ articulo.fecha }}</td>
+            <td>{{ articulo.autor }}</td>
+            <td>{{ articulo.seccion }}</td>
+            <td>{{ articulo.titulo }}</td>
+            <td>{{ articulo.subtitulo }}</td>
+            <td>
+              <a href="{% url 'ver_articulo' articulo.id %}">Leer mas</a>
+            </td>
+            <td>
+              {% if articulo.autor == request.user %}
+                <a href="{% url 'editar_articulo' articulo.id %}">Editar</a>
+              {% endif %}
+            </td>
+            <td>
+              {% if articulo.autor == request.user %}
+                <a href="{% url 'eliminar_articulo' articulo.id %}">Eliminar</a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="6">No hay artículos.</td>
+          </tr>
+        {% endif %}
+        
+      </tbody>
+    </table>
 
- </div>
+  </div>
 
- <br>
-<a href="{% url 'inicio' %}">Volver Inicio </a>
-
+  <br>
+  <a class="btn btn-sucess" href="{% url 'inicio' %}">Volver Inicio</a>
 
 </section>
 {% endblock contenido %}

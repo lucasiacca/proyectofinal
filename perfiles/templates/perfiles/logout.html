@@ -2,4 +2,8 @@
 
 {% block contenido %}
 <h1>Gracias {{object.username}} has cerrado sesión </h1>
+
+<br>
+<a class="btn btn-sucess" href="{% url 'inicio' %}">Volver Inicio</a>
+
 {% endblock contenido %}
